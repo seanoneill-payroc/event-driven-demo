@@ -5,6 +5,7 @@ docker-compose up --build
 ```
 
 seq log system at http://localhost:881
+
 rabbitmq admin http://localhost:15672 
 
 event producer will generate a random event every 15 seconds
