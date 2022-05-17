@@ -19,3 +19,4 @@ logs will show the webhookmanagement service picking up this event and locating 
 * webhook processor (n) will pick up notification jobs 
   * explore priority queue/routing - approach would be to have 1 processor only on *.p10, and a second that handles all nature of a message bus is that it is FIFO, but by providing a dedicated processor, in addition to the rest, this should provide reasonable coverage for priorty messages.
 * service correlation tracking (leverage rabbit, correlation middleware) headers
+* configurable scale (events produced, and consumer)
