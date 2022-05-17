@@ -1,0 +1,89 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32505.426
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "EventProducer", "EventProducer", "{576CC430-E752-4BCA-AB64-799D3B791D83}"
+	ProjectSection(SolutionItems) = preProject
+		EventProducer\README.md = EventProducer\README.md
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EventProducer.Web", "EventProducer\src\EventProducer.Web\EventProducer.Web.csproj", "{0252D4FD-F6FF-47EA-9A6B-C72A86175043}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WebhookManager", "WebhookManager", "{87B24870-2E26-4574-8B4D-73A15BD4D073}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebhookManager.Web", "WebhookManager\src\WebhookManager.Web\WebhookManager.Web.csproj", "{88CBDA4D-D8F9-4E08-9361-B189553BB789}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{334A2B13-4295-44ED-ABC9-9D932654C3D8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.Events", "Common\src\Common.Events\Common.Events.csproj", "{1880D2C4-1814-4E6F-B164-5FC14FD18B12}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.Events.Brokers.RabbitMq", "Common\src\Common.Events.Brokers.RabbitMq\Common.Events.Brokers.RabbitMq.csproj", "{CF86EC94-F203-4A6B-A780-555D3D2AFE89}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebhookManager.Infrastructure", "WebhookManager\src\WebhookManager.Infrastructure\WebhookManager.Infrastructure.csproj", "{144AFB66-47C9-41FE-8C3A-BC945A209862}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebhookManager.Domain", "WebhookManager\src\WebhookManager.Domain\WebhookManager.Domain.csproj", "{28C8CD68-A007-4197-A109-FC449CA70B9A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebhookManager.Application", "WebhookManager\src\WebhookManager.Application\WebhookManager.Application.csproj", "{66567E81-ED77-46AF-A84F-CA3EFE7C5235}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{5A200097-9122-4DE8-B051-8611018CDB4C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebhookManager.Persistence", "WebhookManager\src\WebhookManager.Persistence\WebhookManager.Persistence.csproj", "{FB521627-5C97-4B7B-9B66-7088357CC5C2}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0252D4FD-F6FF-47EA-9A6B-C72A86175043}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0252D4FD-F6FF-47EA-9A6B-C72A86175043}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0252D4FD-F6FF-47EA-9A6B-C72A86175043}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0252D4FD-F6FF-47EA-9A6B-C72A86175043}.Release|Any CPU.Build.0 = Release|Any CPU
+		{88CBDA4D-D8F9-4E08-9361-B189553BB789}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{88CBDA4D-D8F9-4E08-9361-B189553BB789}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{88CBDA4D-D8F9-4E08-9361-B189553BB789}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{88CBDA4D-D8F9-4E08-9361-B189553BB789}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1880D2C4-1814-4E6F-B164-5FC14FD18B12}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1880D2C4-1814-4E6F-B164-5FC14FD18B12}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1880D2C4-1814-4E6F-B164-5FC14FD18B12}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1880D2C4-1814-4E6F-B164-5FC14FD18B12}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CF86EC94-F203-4A6B-A780-555D3D2AFE89}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CF86EC94-F203-4A6B-A780-555D3D2AFE89}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CF86EC94-F203-4A6B-A780-555D3D2AFE89}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CF86EC94-F203-4A6B-A780-555D3D2AFE89}.Release|Any CPU.Build.0 = Release|Any CPU
+		{144AFB66-47C9-41FE-8C3A-BC945A209862}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{144AFB66-47C9-41FE-8C3A-BC945A209862}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{144AFB66-47C9-41FE-8C3A-BC945A209862}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{144AFB66-47C9-41FE-8C3A-BC945A209862}.Release|Any CPU.Build.0 = Release|Any CPU
+		{28C8CD68-A007-4197-A109-FC449CA70B9A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{28C8CD68-A007-4197-A109-FC449CA70B9A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{28C8CD68-A007-4197-A109-FC449CA70B9A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{28C8CD68-A007-4197-A109-FC449CA70B9A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{66567E81-ED77-46AF-A84F-CA3EFE7C5235}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{66567E81-ED77-46AF-A84F-CA3EFE7C5235}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{66567E81-ED77-46AF-A84F-CA3EFE7C5235}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{66567E81-ED77-46AF-A84F-CA3EFE7C5235}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FB521627-5C97-4B7B-9B66-7088357CC5C2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FB521627-5C97-4B7B-9B66-7088357CC5C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FB521627-5C97-4B7B-9B66-7088357CC5C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FB521627-5C97-4B7B-9B66-7088357CC5C2}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{0252D4FD-F6FF-47EA-9A6B-C72A86175043} = {576CC430-E752-4BCA-AB64-799D3B791D83}
+		{88CBDA4D-D8F9-4E08-9361-B189553BB789} = {5A200097-9122-4DE8-B051-8611018CDB4C}
+		{1880D2C4-1814-4E6F-B164-5FC14FD18B12} = {334A2B13-4295-44ED-ABC9-9D932654C3D8}
+		{CF86EC94-F203-4A6B-A780-555D3D2AFE89} = {334A2B13-4295-44ED-ABC9-9D932654C3D8}
+		{144AFB66-47C9-41FE-8C3A-BC945A209862} = {5A200097-9122-4DE8-B051-8611018CDB4C}
+		{28C8CD68-A007-4197-A109-FC449CA70B9A} = {5A200097-9122-4DE8-B051-8611018CDB4C}
+		{66567E81-ED77-46AF-A84F-CA3EFE7C5235} = {5A200097-9122-4DE8-B051-8611018CDB4C}
+		{5A200097-9122-4DE8-B051-8611018CDB4C} = {87B24870-2E26-4574-8B4D-73A15BD4D073}
+		{FB521627-5C97-4B7B-9B66-7088357CC5C2} = {5A200097-9122-4DE8-B051-8611018CDB4C}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B2086365-D925-4E66-BD71-F62B48F86FC5}
+	EndGlobalSection
+EndGlobal

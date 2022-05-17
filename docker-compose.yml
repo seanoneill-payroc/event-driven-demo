@@ -1,0 +1,59 @@
+version: "3.8"
+
+services:
+  rabbitmq:
+    image: rabbitmq:3.10.1-management
+    container_name: rabbitmq
+    ports:
+      - 5672:5672
+      - 15672:15672
+    volumes:
+      - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
+      - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
+    healthcheck:
+        test: ["CMD", "curl", "-f", "http://rabbitmq:15672"]
+        interval: 30s
+        timeout: 10s
+        retries: 5
+    networks:
+      - events
+  
+  seq:
+    container_name: seq
+    image: datalust/seq:latest
+    ports:
+      - 5341:5341
+      - 881:80
+    volumes:
+      - ~/.docker-conf/seq/data:/data
+    environment:
+      - ACCEPT_EULA=Y
+    networks:
+      - events  
+
+  eventproducer:
+    container_name: event_producer
+    build:
+      context: .
+      dockerfile: EventProducer\src\EventProducer.Web\Dockerfile
+    ports:
+      - 811:80
+    networks:
+      - events
+
+  webhookmanager:
+    container_name: webhook_manager
+    build:
+      context: .
+      dockerfile: WebhookManager\src\WebhookManager.Web\Dockerfile
+    ports:
+      - 812:80
+    networks:
+      - events
+    restart: on-failure   
+    depends_on:
+      - rabbitmq
+
+networks:
+  events:
+    driver: bridge

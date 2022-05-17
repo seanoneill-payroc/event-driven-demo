@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Common\src\Common.Events.Brokers.RabbitMq\Common.Events.Brokers.RabbitMq.csproj" />
+    <ProjectReference Include="..\WebhookManager.Application\WebhookManager.Application.csproj" />
+  </ItemGroup>
+
+</Project>
