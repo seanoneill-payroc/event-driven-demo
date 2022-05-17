@@ -1,4 +1,5 @@
-using WebhookManager.Web.Services.Events;
+using Serilog;
+using WebhookProducer.Web.Services.Events;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,21 +9,16 @@ builder.Host.UseSerilog((ctx, loggerConfiguration) =>
         .ReadFrom.Configuration(ctx.Configuration);
 });
 
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddHttpClient();
 
-builder.Services.AddSingleton<RabbitMqWebhookNotificationEmitter>();
+// Add services to the container.
 builder.Services.Configure<RabbitMqConfiguration>(builder.Configuration.GetSection("RabbitMq"));
 builder.Services.AddHostedService<RabbitMQEventListener>();
 
 var app = builder.Build();
 
-
-app.UseSwagger();
-app.UseSwaggerUI();
+// Configure the HTTP request pipeline.
 
 app.UseHttpsRedirection();
-
-//app.UseAuthorization();
 
 app.Run();

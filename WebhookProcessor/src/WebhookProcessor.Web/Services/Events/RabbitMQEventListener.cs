@@ -1,13 +1,10 @@
-﻿using Common.Events.Brokers.RabbitMq;
-using MediatR;
-using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.Options;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
+using Serilog;
 using System.Text;
-using System.Text.Json;
-using WebhookManager.Domain.Models;
 
-namespace WebhookManager.Web.Services.Events;
+namespace WebhookProducer.Web.Services.Events;
 
 public class RabbitMqConfiguration
 {
@@ -21,16 +18,14 @@ public class RabbitMQEventListener : IHostedService, IDisposable
 {
     const string ALLEVENTS_ROUTINGKEY = "#"; //listen to all routing keys
     private readonly IOptions<RabbitMqConfiguration> _options;
-    private readonly RabbitMqWebhookNotificationEmitter _emitter;
     private IConnection? _connection;
     private IModel? _channel;
     private AsyncEventingBasicConsumer? _consumer;
     private bool _disposedValue;
 
-    public RabbitMQEventListener(IOptions<RabbitMqConfiguration> options, RabbitMqWebhookNotificationEmitter emitter)
+    public RabbitMQEventListener(IOptions<RabbitMqConfiguration> options)
     {
         _options = options;
-        _emitter = emitter;
     }
 
     public Task StartAsync(CancellationToken cancellationToken)
@@ -57,36 +52,16 @@ public class RabbitMQEventListener : IHostedService, IDisposable
         return Task.CompletedTask;
     }
 
-    private async Task EventReceived(object sender, BasicDeliverEventArgs @event)
+    private Task EventReceived(object sender, BasicDeliverEventArgs @event)
     {
         var json = Encoding.UTF8.GetString(@event.Body.Span);
 
         Log.ForContext("body", json)
-            .Information("[{Application}|{Service}] event {EventName} Recieved", "WebhookManager", "WebhookManager", nameof(RabbitMQEventListener), @event.RoutingKey);
-
-        //TODO consider scoped processor (it's not a consideration, we'll want that here)
-        //TODO error trap
-        await _emitter.Emit(new Common.Events.Event<WebhookNotification>()
-        {
-            Metadata = new Common.Events.EventMetadata(
-                EventName : "webhook.notification.p1",
-                EventDate : DateTimeOffset.UtcNow,
-                EventId : Guid.NewGuid().ToString()
-            ),
-            Payload = new WebhookNotification()
-            {
-                Subscription = new WebhookSubscription
-                {
-                    Id = 4,
-                    Url = new Uri("https://thisisstaticly.com"),
-                },
-                Event = json,
-            }
-        });
-
+            .Information("[{Application}|{Service}] event {EventName} Recieved", "WebhookProducer", "WebhookProducer", nameof(RabbitMQEventListener), @event.RoutingKey);
 
         _channel?.BasicAck(@event.DeliveryTag, multiple: false);
 
+        return Task.CompletedTask;
     }
 
     public Task StopAsync(CancellationToken cancellationToken)
@@ -117,22 +92,5 @@ public class RabbitMQEventListener : IHostedService, IDisposable
     {
         Dispose(disposing: true);
         GC.SuppressFinalize(this);
-    }
-}
-
-public class WebhookNotification
-{
-    public WebhookSubscription Subscription { get; set; }
-    public string Event { get; set; }
-}
-
-public class RabbitMqWebhookNotificationEmitter : RabbitMqEventBroker
-{
-    public RabbitMqWebhookNotificationEmitter(IWebHostEnvironment env) : base(Options.Create(new RabbitMqEventBrokerConfiguration()
-    {
-        Exchange = "webhook.notification",
-        Host = env.IsDevelopment() ?  "localhost" : "rabbitmq", //TODO haaaaack
-    }))
-    {
     }
 }

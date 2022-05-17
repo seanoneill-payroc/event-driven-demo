@@ -54,6 +54,19 @@ services:
     depends_on:
       - rabbitmq
 
+  webhookconsumer:
+    container_name: webhook_consumer
+    build:
+      context: .
+      dockerfile: WebhookProcessor\src\WebhookProcessor.Web\Dockerfile
+    ports:
+      - 813:80
+    networks:
+      - events
+    restart: on-failure
+    depends_on:
+      - rabbitmq
+
 networks:
   events:
     driver: bridge
