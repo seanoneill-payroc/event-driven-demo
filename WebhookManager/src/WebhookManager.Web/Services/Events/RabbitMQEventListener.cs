@@ -59,34 +59,48 @@ public class RabbitMQEventListener : IHostedService, IDisposable
 
     private async Task EventReceived(object sender, BasicDeliverEventArgs @event)
     {
+
         var json = Encoding.UTF8.GetString(@event.Body.Span);
-
-        Log.ForContext("body", json)
-            .Information("[{Application}|{Service}] event {EventName} Recieved", "WebhookManager", "WebhookManager", nameof(RabbitMQEventListener), @event.RoutingKey);
-
-        //TODO consider scoped processor (it's not a consideration, we'll want that here)
-        //TODO error trap
-        await _emitter.Emit(new Common.Events.Event<WebhookNotification>()
+        try
         {
-            Metadata = new Common.Events.EventMetadata(
-                EventName : "webhook.notification.p1",
-                EventDate : DateTimeOffset.UtcNow,
-                EventId : Guid.NewGuid().ToString()
-            ),
-            Payload = new WebhookNotification()
+
+            var priority = @event.BasicProperties.Headers.ContainsKey("x-priority") ? (long)@event.BasicProperties.Headers["x-priority"] : 3L;
+            var enteredQueue = @event.BasicProperties.Headers.ContainsKey("x-entered-queue")
+                ? DateTimeOffset.Parse( Encoding.UTF8.GetString( @event.BasicProperties.Headers["x-entered-queue"] as byte[]))
+                : DateTimeOffset.UtcNow.AddDays(-1);
+
+            Log.ForContext("body", json)
+                .Information("[{Application}|{Service}] event {EventName} {Priority} Recieved Time in Queue: {TimeInQueue}ms", "WebhookManager", nameof(RabbitMQEventListener), @event.RoutingKey, priority, (DateTimeOffset.UtcNow - enteredQueue).TotalMilliseconds);
+
+            //TODO consider scoped processor (it's not a consideration, we'll want that here)
+            //TODO error trap
+            await _emitter.Emit(new Common.Events.Event<WebhookNotification>()
             {
-                Subscription = new WebhookSubscription
+                Metadata = new Common.Events.EventMetadata(
+                    EventName: $"webhook.notification.p{priority}",
+                    EventDate: DateTimeOffset.UtcNow,
+                    EventId: Guid.NewGuid().ToString()
+                ),
+                Payload = new WebhookNotification()
                 {
-                    Id = 4,
-                    Url = new Uri("https://thisisstaticly.com"),
-                },
-                Event = json,
-            }
-        });
+                    Subscription = new WebhookSubscription
+                    {
+                        Id = 4,
+                        Url = new Uri("https://thisisstaticly.com"),
+                    },
+                    Event = json,
+                }
+            });
 
-
-        _channel?.BasicAck(@event.DeliveryTag, multiple: false);
-
+            _channel?.BasicAck(@event.DeliveryTag, multiple: false);
+        }
+        catch(Exception e)
+        {
+            Log.ForContext("body", json)
+                .Error(e, "Error processing message");
+            
+            _channel?.BasicNack(@event.DeliveryTag, multiple: true, requeue: false); //don't requeue until we have some retry theshold or failure detection
+        }
     }
 
     public Task StopAsync(CancellationToken cancellationToken)

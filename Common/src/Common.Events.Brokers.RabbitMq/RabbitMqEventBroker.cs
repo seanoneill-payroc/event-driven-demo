@@ -16,7 +16,7 @@ public class RabbitMqEventBrokerConfiguration
 public class RabbitMqEventBroker : IEventBroker, IDisposable
 {
     private readonly IOptions<RabbitMqEventBrokerConfiguration> _options;
-
+    private readonly Random _random = new Random(); //generate a random property;
     private IConnection? _connection;
     private IModel? _channel;
 
@@ -70,10 +70,17 @@ public class RabbitMqEventBroker : IEventBroker, IDisposable
 
         try
         {
+            var properties = _channel?.CreateBasicProperties();
+            properties.Headers = new Dictionary<string,object>()
+            {
+                { "x-priority", (long)_random.Next(1,3)  },
+                { "x-entered-queue", DateTimeOffset.UtcNow.ToString() },
+            };
             _channel?.BasicPublish(
                 exchange: Exchange,
                 routingKey: @event.Metadata.EventName,
-                body: body
+                body: body,
+                basicProperties: properties
             );
         }
         catch (Exception e)

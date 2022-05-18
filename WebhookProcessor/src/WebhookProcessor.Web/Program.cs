@@ -13,7 +13,7 @@ builder.Services.AddHttpClient();
 
 // Add services to the container.
 builder.Services.Configure<RabbitMqConfiguration>(builder.Configuration.GetSection("RabbitMq"));
-builder.Services.AddHostedService<RabbitMQEventListener>();
+builder.Services.AddHostedService<WebhookProcessor>();
 
 var app = builder.Build();
 

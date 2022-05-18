@@ -54,8 +54,8 @@ services:
     depends_on:
       - rabbitmq
 
-  webhookconsumer:
-    container_name: webhook_consumer
+  webhookprocessor1:
+    container_name: webhook_processor_1
     build:
       context: .
       dockerfile: WebhookProcessor\src\WebhookProcessor.Web\Dockerfile
@@ -66,6 +66,21 @@ services:
     restart: on-failure
     depends_on:
       - rabbitmq
+
+  webhookprocessor2:
+    container_name: webhook_processor_2
+    build:
+      context: .
+      dockerfile: WebhookProcessor\src\WebhookProcessor.Web\Dockerfile
+    ports:
+      - 814:80
+    networks:
+      - events
+    restart: on-failure
+    depends_on:
+      - rabbitmq
+    environment:
+      - RabbitMq:RoutingKey=webhook.notification.p1
 
 networks:
   events:

@@ -2,7 +2,9 @@
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using Serilog;
+using Serilog.Context;
 using System.Text;
+using System.Text.Json;
 
 namespace WebhookProducer.Web.Services.Events;
 
@@ -12,9 +14,10 @@ public class RabbitMqConfiguration
     public int Port { get; set; } = 5672;
     public string Exchange { get; set; } = "events";
     public string Queue { get; set; } = "webhookmanager";
+    public string RoutingKey { get; set; } = "#";
 }
 
-public class RabbitMQEventListener : IHostedService, IDisposable
+public class WebhookProcessor : IHostedService, IDisposable
 {
     const string ALLEVENTS_ROUTINGKEY = "#"; //listen to all routing keys
     private readonly IOptions<RabbitMqConfiguration> _options;
@@ -23,7 +26,7 @@ public class RabbitMQEventListener : IHostedService, IDisposable
     private AsyncEventingBasicConsumer? _consumer;
     private bool _disposedValue;
 
-    public RabbitMQEventListener(IOptions<RabbitMqConfiguration> options)
+    public WebhookProcessor(IOptions<RabbitMqConfiguration> options)
     {
         _options = options;
     }
@@ -42,7 +45,9 @@ public class RabbitMQEventListener : IHostedService, IDisposable
         var queueName = _options.Value.Queue;
 
         _channel.QueueDeclare(queueName, durable: true, autoDelete: false, exclusive: false);
-        _channel.QueueBind(queueName, _options.Value.Exchange, ALLEVENTS_ROUTINGKEY);
+        _channel.QueueBind(queueName, _options.Value.Exchange, _options.Value.RoutingKey);
+
+        Log.Information("### Listening to events for {RoutingKey}", _options.Value.RoutingKey);
 
         _consumer = new AsyncEventingBasicConsumer(_channel);
         _consumer.Received += EventReceived;
@@ -56,9 +61,15 @@ public class RabbitMQEventListener : IHostedService, IDisposable
     {
         var json = Encoding.UTF8.GetString(@event.Body.Span);
 
-        Log.ForContext("body", json)
-            .Information("[{Application}|{Service}] event {EventName} Recieved", "WebhookProducer", "WebhookProducer", nameof(RabbitMQEventListener), @event.RoutingKey);
+        var obj = JsonSerializer.Deserialize<JsonDocument>(json);
 
+
+        //using (LogContext.PushProperty("EventId", obj["Metadata"]["EventId"]?? "UKNOWN"))
+        //{
+            Log.ForContext("body", json)
+                .ForContext("obj", obj, destructureObjects: true)
+                .Information("[{Application}] event {EventName} Recieved while listening to {ListeningKey}", nameof(WebhookProcessor), @event.RoutingKey, _options.Value.RoutingKey);
+        //}
         _channel?.BasicAck(@event.DeliveryTag, multiple: false);
 
         return Task.CompletedTask;
