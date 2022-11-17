@@ -64,6 +64,8 @@ services:
     networks:
       - events
     restart: on-failure
+    environment:
+      - RabbitMq:ConnectionName=webhook_processor_1
     depends_on:
       - rabbitmq
 
@@ -80,6 +82,7 @@ services:
     depends_on:
       - rabbitmq
     environment:
+      - RabbitMq:ConnectionName=webhook_processor_2
       - RabbitMq:RoutingKey=webhook.notification.p1
 
 networks:

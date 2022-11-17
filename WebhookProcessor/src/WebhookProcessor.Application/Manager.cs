@@ -11,6 +11,7 @@ namespace WebhookProcessor.Application;
 public class RabbitMqConfiguration
 {
     public string Host { get; set; }
+    public string ConnectionName { get; set; }
     public int Port { get; set; } = 5672;
     public string ExchangeName { get; set; }
     public string QueueName { get; set; }
@@ -37,6 +38,7 @@ public class Manager
         {
             HostName = _configuration.Host,
             DispatchConsumersAsync = true,
+            ClientProvidedName = _configuration.ConnectionName,
         };
 
         _connection = factory.CreateConnection();

@@ -9,6 +9,7 @@ namespace Common.Events.Brokers.RabbitMq;
 public class RabbitMqEventBrokerConfiguration
 {
     public string Host { get; set; }
+    public string ConnectionName { get; set; }
     public int Port { get; set; } = 5672;
     public string Exchange { get; set; }
     public string ExchangeType { get; set; } = RabbitMQ.Client.ExchangeType.Direct;
@@ -33,7 +34,7 @@ public class RabbitMqEventBroker : IEventBroker, IDisposable
         var factory = new ConnectionFactory()
         {
             HostName = _options.Value.Host,
-
+            ClientProvidedName = _options.Value.ConnectionName
         };
 
         _connection = factory.CreateConnection();
