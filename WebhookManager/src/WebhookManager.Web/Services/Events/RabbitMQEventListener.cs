@@ -1,10 +1,8 @@
 ﻿using Common.Events.Brokers.RabbitMq;
-using MediatR;
 using Microsoft.Extensions.Options;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using System.Text;
-using System.Text.Json;
 using WebhookManager.Domain.Models;
 
 namespace WebhookManager.Web.Services.Events;
@@ -15,6 +13,7 @@ public class RabbitMqConfiguration
     public int Port { get; set; } = 5672;
     public string Exchange { get; set; } = "events";
     public string Queue { get; set; } = "webhookmanager";
+    public string ExchangeType { get; internal set; } = "topic";
 }
 
 public class RabbitMQEventListener : IHostedService, IDisposable
@@ -45,6 +44,8 @@ public class RabbitMQEventListener : IHostedService, IDisposable
         _channel = _connection.CreateModel();
 
         var queueName = _options.Value.Queue;
+
+        _channel.ExchangeDeclare("webhook.notification", _options.Value.ExchangeType, durable: true, autoDelete: false);
 
         _channel.QueueDeclare(queueName, durable: true, autoDelete: false, exclusive: false);
         _channel.QueueBind(queueName, _options.Value.Exchange, ALLEVENTS_ROUTINGKEY);
@@ -145,6 +146,7 @@ public class RabbitMqWebhookNotificationEmitter : RabbitMqEventBroker
     public RabbitMqWebhookNotificationEmitter(IWebHostEnvironment env) : base(Options.Create(new RabbitMqEventBrokerConfiguration()
     {
         Exchange = "webhook.notification",
+        ExchangeType = ExchangeType.Topic,
         Host = env.IsDevelopment() ?  "localhost" : "rabbitmq", //TODO haaaaack
     }))
     {

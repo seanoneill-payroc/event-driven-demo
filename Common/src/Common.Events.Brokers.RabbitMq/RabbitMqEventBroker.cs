@@ -11,6 +11,7 @@ public class RabbitMqEventBrokerConfiguration
     public string Host { get; set; }
     public int Port { get; set; } = 5672;
     public string Exchange { get; set; }
+    public string ExchangeType { get; set; } = RabbitMQ.Client.ExchangeType.Direct;
 }
 
 public class RabbitMqEventBroker : IEventBroker, IDisposable
@@ -42,7 +43,7 @@ public class RabbitMqEventBroker : IEventBroker, IDisposable
 
         _channel.ExchangeDeclare(
             exchange: _options.Value.Exchange,
-            type: ExchangeType.Topic,
+            type: _options.Value.ExchangeType,
             durable: true,
             autoDelete: false
         );

@@ -34,9 +34,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WebhookProcessor", "Webhook
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{9BB8F196-93AE-40C0-B9C6-403C3C7C0B60}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebhookProcessor.Application", "WebhookProcessor\src\WebhookProcessor.Application\WebhookProcessor.Application.csproj", "{2091A60E-99DF-4036-BA88-1836F4306248}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebhookProcessor.Application", "WebhookProcessor\src\WebhookProcessor.Application\WebhookProcessor.Application.csproj", "{2091A60E-99DF-4036-BA88-1836F4306248}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebhookProcessor.Web", "WebhookProcessor\src\WebhookProcessor.Web\WebhookProcessor.Web.csproj", "{937C4E37-B1DB-4DFC-8B36-C54A6F6E03E7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebhookProcessor.Web", "WebhookProcessor\src\WebhookProcessor.Web\WebhookProcessor.Web.csproj", "{937C4E37-B1DB-4DFC-8B36-C54A6F6E03E7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.Events.Listener.RabbitMq", "Common\src\Common.Events.Listener.RabbitMq\Common.Events.Listener.RabbitMq.csproj", "{2112613A-6C13-46DE-94F1-5A149FE95737}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -84,6 +86,10 @@ Global
 		{937C4E37-B1DB-4DFC-8B36-C54A6F6E03E7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{937C4E37-B1DB-4DFC-8B36-C54A6F6E03E7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{937C4E37-B1DB-4DFC-8B36-C54A6F6E03E7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2112613A-6C13-46DE-94F1-5A149FE95737}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2112613A-6C13-46DE-94F1-5A149FE95737}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2112613A-6C13-46DE-94F1-5A149FE95737}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2112613A-6C13-46DE-94F1-5A149FE95737}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -101,6 +107,7 @@ Global
 		{9BB8F196-93AE-40C0-B9C6-403C3C7C0B60} = {5FFF51D9-A6B4-4CB4-8E3D-6C2D1B860838}
 		{2091A60E-99DF-4036-BA88-1836F4306248} = {9BB8F196-93AE-40C0-B9C6-403C3C7C0B60}
 		{937C4E37-B1DB-4DFC-8B36-C54A6F6E03E7} = {9BB8F196-93AE-40C0-B9C6-403C3C7C0B60}
+		{2112613A-6C13-46DE-94F1-5A149FE95737} = {334A2B13-4295-44ED-ABC9-9D932654C3D8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B2086365-D925-4E66-BD71-F62B48F86FC5}

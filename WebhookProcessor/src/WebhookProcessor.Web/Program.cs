@@ -1,5 +1,5 @@
 using Serilog;
-using WebhookProducer.Web.Services.Events;
+using WebhookProcessor.Web.Services.Events;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,7 +13,8 @@ builder.Services.AddHttpClient();
 
 // Add services to the container.
 builder.Services.Configure<RabbitMqConfiguration>(builder.Configuration.GetSection("RabbitMq"));
-builder.Services.AddHostedService<WebhookProcessor>();
+//builder.Services.AddHostedService<WebhookProcessor.Web.Services.Events.WebhookProcessor>();
+builder.Services.AddWebhookListening(builder.Configuration);
 
 var app = builder.Build();
 

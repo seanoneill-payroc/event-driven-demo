@@ -2,6 +2,6 @@
 
 public class WebhookSubscription
 {
-    public long Id { get; set; }
-    public Uri? Url { get; set; }
+    public long Id { get; init; }
+    public required Uri Url { get; init; }
 }
