@@ -9,7 +9,7 @@ public static class DependencyInjection
         services.AddScoped<WebhookEventProcessor>();
         services.AddHostedService<WebhookEventProcessorService>();
 
-        services.Configure<RabbitMqListeningConfiguration>(configuration.GetSection(nameof(RabbitMqListeningConfiguration)));
+        services.Configure<RabbitMqListeningConfiguration>(configuration.GetSection("RabbitMq"));
         return services;
     }
 }

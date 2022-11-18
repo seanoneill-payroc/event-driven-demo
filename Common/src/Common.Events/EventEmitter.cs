@@ -19,26 +19,26 @@ public class EventEmitter : IEventEmitter
         Log.Information("Emitting events to {BrokerCount} broker {@Brokers}", _eventBrokers.Count(), _eventBrokers.Select(x => x.GetType().Name));
         int counter = 0;
         await Parallel.ForEachAsync(
-            _eventBrokers,
-            async (broker, cancellationToken) =>
+            source: _eventBrokers,
+            cancellationToken: cancellationToken,
+            body: async (broker, brokerCancellationToken) =>
             {
-                var timer = Stopwatch.StartNew();
+                var brokerTimer = Stopwatch.StartNew();
                 try
                 {
-                    await broker.Emit(@event, cancellationToken)
+                    await broker.Emit(@event, brokerCancellationToken)
                         .ConfigureAwait(false);
-                    Log.Information("{Broker} successfully emitted {@Event} in {ElapsedMS}ms", broker.GetType().Name, @event, timer.ElapsedMilliseconds);
+                    Log.Information("{Broker} successfully emitted {@Event} in {ElapsedMS}ms", broker.GetType().Name, @event, brokerTimer.ElapsedMilliseconds);
                 }
                 catch (Exception e)
                 {
-                    Log.Error(e, "Error emitting to {Broker} in {ElapsedMS}", broker.GetType().Name, timer.ElapsedMilliseconds);
+                    Log.Error(e, "Error emitting to {Broker} in {ElapsedMS}", broker.GetType().Name, brokerTimer.ElapsedMilliseconds);
                 }
                 finally
                 {
                     Interlocked.Increment(ref counter);
                 }
-            }
-        );
+            });
         Log.Information("{System} submitted to {SuccessCount} brokers in {ElapsedMS}ms", nameof(EventEmitter), counter, timer.ElapsedMilliseconds);
     }
 }

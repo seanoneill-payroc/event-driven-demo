@@ -9,7 +9,7 @@ namespace Common.Events.Brokers.RabbitMq;
 public class RabbitMqEventBrokerConfiguration
 {
     public string Host { get; set; }
-    public string ConnectionName { get; set; }
+    public string ConnectionName { get; set; } = "somedefault";
     public int Port { get; set; } = 5672;
     public string Exchange { get; set; }
     public string ExchangeType { get; set; } = RabbitMQ.Client.ExchangeType.Direct;

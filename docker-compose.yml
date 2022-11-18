@@ -38,6 +38,8 @@ services:
       dockerfile: EventProducer\src\EventProducer.Web\Dockerfile
     ports:
       - 811:80
+    environment:
+      - RabbitMq:ConnectionName=EventProducer
     networks:
       - events
 

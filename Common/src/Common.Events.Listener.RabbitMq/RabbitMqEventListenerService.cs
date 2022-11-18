@@ -12,6 +12,7 @@ namespace Common.Events.Listener.RabbitMq
     {
         public string? Host { get; set; }
         public int Port { get; set; } = 5672;
+        public string? ConnectionName { get; set; }
         public required string? QueueName { get; set; }
         public string? ExchangeName { get; set; }
         public required string RoutingKey { get; init; }
@@ -54,6 +55,7 @@ namespace Common.Events.Listener.RabbitMq
             {
                 HostName = _options.Host,
                 DispatchConsumersAsync = true,
+                ClientProvidedName = _options.ConnectionName ?? "unspecified",
             };
 
             _connection = factory.CreateConnection();
@@ -62,7 +64,7 @@ namespace Common.Events.Listener.RabbitMq
             var queueName = _options.QueueName;
 
             _channel.QueueDeclare(queueName, durable: true, autoDelete: false, exclusive: false);
-            _channel.QueueBind(queueName, _options.QueueName, _options.RoutingKey);
+            _channel.QueueBind(_options.QueueName, _options.ExchangeName, _options.RoutingKey);
 
             _logger.Information("### Listening to events for {RoutingKey}", _options.RoutingKey);
 
